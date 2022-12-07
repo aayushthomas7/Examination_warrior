@@ -1,0 +1,721 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'nta-quiz/style.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+    <title>Document</title>
+    <style>
+        .links-background-not-answered {
+            background: url(../media/not_answered.png)!important;
+
+        }
+        .links-background-answered {
+            /* background: url(answered.png);
+            color: "#fff"; */
+            /* background: url({%static 'nta-quiz/answered.png'%}) !important; */
+            background: url(../media/answered.png)!important;
+            /* background: blue!important; */
+        }
+        .links-background-marked-for-review {
+            background: url(../media/marked_for_review.png)!important;
+
+            /* background: "url({%static 'nta-quiz/marked_for_review.png'%})"; */
+            color: "#fff";
+        }
+        .links-background-answered-marked-for-review {
+            background: url(../media/answered_marked_for_review.png)!important;
+
+            /* background: "url({%static 'nta-quiz/answered_marked_for_review.png'%})"; */
+            color: "#fff";
+        }
+        
+    </style>
+</head>
+<body id = "body">
+    <div class="top-bar">
+        <div class="container">
+            <!-- <div class="col-md-12"> -->
+                <div class="top-links">
+                    <ul class = "my-1">
+                        <li>
+                            <a href="{%url 'student-dashboard'%}">
+                                <img src="{% static 'nta-quiz/user.png' %}" alt="">
+                                Home</a>
+                        </li>
+                    </ul>
+                </div>
+            <!-- </div> -->
+        </div>
+    </div>
+    <div class="user_details_background">
+        <div class = "container ">
+            <div class="row">
+                <div class="col-md-9 col-sm-12 ">
+                    <table>
+                        <tr>
+                            <td class = "table-users-img"><img src="user.png" alt=""></td>
+                            <td>
+                                <table >
+                                    <tr>
+                                        <td>Candidate name</td>
+                                        <td class = "user_values">{{request.user.first_name}} {{request.user.last_name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Exam name</td>
+                                        <td class = "user_values">UGC NET</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Subject Name</td>
+                                        <td class = "user_values">{{quiz.name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Remaining time</td>
+                                        <td class = "user_values " id = "timer">Use your time wisely</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-3 sm-md-12 language">
+                    <select name="" id="" class= "language">
+                        <option value="" class="value">English</option>
+                        <option value="" class="value">Malayalam</option>
+
+                    </select>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <table id = "img_questions"> 
+                    <!-- trying  -->
+                    {%for i in n %}
+                        <div class = "img_question" id = "img_question0{{forloop.counter}}" style="display:none;">
+                            <div class="question-height my-3">
+                                <h4 class="question-title">Question {{forloop.counter}}</h4>
+        
+                                <img src="../media/{{quiz.name}}/question{{forloop.counter}}.jpg" alt="question_img_{{forloop.counter}}" class = "img-responsive">
+                            </div>
+                        </div>
+                    {%endfor%}
+                    <!-- tryed -->
+                    <div class = "img_question" id = "img_question01" style="display:block;">
+                        <div class="question-height my-3">
+                            <h4 class="question-title">Question 1</h4>
+    
+                            <img src="../media/{{quiz.name}}/question1.jpg" alt="question_img_1" class = "img-responsive">
+                        </div>
+                    </div>
+                    
+                    <!-- <div class = "img_question" id = "img_question02" style="display:none;">
+                        <div class="question-height mt-3">
+                            <h4 class="question-title">Question 2</h4>
+    
+                            <img src="question2.jpg" alt="question_img_1" class = "img-responsive">
+                        </div>
+                    </div>
+                    <div class = "img_question" id = "img_question06" style="display:none;">
+                        <div class="question-height mt-3">
+                            <h4 class="question-title">Question 6</h4>
+    
+                            <img src="../media/Tourism/question6.jpg" alt="question_img_6" class = "img-responsive">
+                        </div>
+                    </div> -->
+                    <form action="" method="post" id = "quiz-form">
+                        {%csrf_token%}
+                        
+                        <table class="table options" id  = "option01">
+                            <tr>
+                                <td><input type="radio" class = "ans" name = "option01" value="ans1"> 1 )</td>
+                                <td><input type="radio" class = "ans" name = "option01" value="ans2"> 2 )</td>
+                                <td><input type="radio" class = "ans" name = "option01" value="ans3"> 3 )</td>
+                                <td><input type="radio" class = "ans" name = "option01" value="ans4"> 4 )</td>      
+                            </tr>
+                        </table>
+                        {%for i in n%}
+                            <!-- here {{forloop.counter|add:'1'}} -->
+                            <table class="table options not-visible" id  = "option0{{forloop.counter}}">
+                                <tr>
+                                    <td><input type="radio" class = "ans" name = "option0{{forloop.counter}}" value="ans1"> 1 )</td>
+                                    <td><input type="radio" class = "ans" name = "option0{{forloop.counter}}" value="ans2"> 2 )</td>
+                                    <td><input type="radio" class = "ans" name = "option0{{forloop.counter}}" value="ans3"> 3 )</td>
+                                    <td><input type="radio" class = "ans" name = "option0{{forloop.counter}}" value="ans4"> 4 )</td>      
+                                </tr>
+                            </table>
+                        {%endfor%}
+                        <!-- <table class="table options not-visible" id = "option02">
+                            <tr>
+                                <td><input type="radio" class = "ans" name = "option2" value="ans1"> 1 )</td>
+                                <td><input type="radio" class = "ans" name = "option2" value="ans2"> 2 )</td>
+                                <td><input type="radio" class = "ans" name = "option2" value="ans3"> 3 )</td>
+                                <td><input type="radio" class = "ans" name = "option2" value="ans4"> 4 )</td>      
+                            </tr>
+                        </table>
+                        <table class="table options not-visible" id = "option06">
+                            <tr>
+                                <td><input type="radio" class = "ans" name = "option6" value="ans1"> 1 )</td>
+                                <td><input type="radio" class = "ans" name = "option6" value="ans2"> 2 )</td>
+                                <td><input type="radio" class = "ans" name = "option6" value="ans3"> 3 )</td>
+                                <td><input type="radio" class = "ans" name = "option6" value="ans4"> 4 )</td>      
+                            </tr>
+                        </table> -->
+                    
+                        <div class="buttons">
+                            <button id ="btn_save" class="btn btn-success m-1">SAVE AND NEXT</button>
+                            <!-- <button onclick = "clearOption('option1');" id ="btn_clear" class="btn btn-default m-1">CLEAR</button> -->
+                            <button id ="btn-clear"  class="btn btn-default m-1">CLEAR</button>
+                            <button id ="btn_save_mark_review" class="btn btn-warning m-1">SAVE & MARK FOR REVIEW</button>
+                            <button id = "btn_mark_review" class="btn btn-primary m-1">MARK FOR REVIEW AND NEXT</button>
+                        </div>
+                        <div style ="border-top: 1px solid #808080; background: #f5f5f5;" class = "col-sm-12 my-2">
+                            <button type = "submit" class ="btn btn-success my-2" style="float:right">Submit</button>
+                            <!-- <a class = "btn btn-default my-2" href="">BACK </a>
+                            <a class = "btn btn-default my-2" href="">NEXT </a> -->
+                            <!-- <button onclick="showPrevImg()" id = "backbtn" class = "btn btn-default my-2" >BACK </button>
+                            <button id = " nextbtn" class = "btn btn-default my-2">NEXT </button> -->
+                        </div>
+                    </form>
+            </div>   
+            <div class="col-md-4">
+                <div class = "panel panel-body panel-default mb-0 mt-10">
+                    <div class="info_details table-responsive">
+                        <table class = "table">
+                            <tr>
+                                <td class = "info_details_not_visited " id = "not-visitedct" style="color:black";>{{total_questions|add:"-1"}}</td>
+                                <td>Not Visited</td>
+                                <td class = "info_details_not_answered" id = "not-answeredct">1</td>
+                                <td>Not answered</td>
+                            </tr>
+                            <tr>
+                                <td class = "info_details_answered" id = "answeredct">0</td>
+                                <td>Answered</td>
+                                <td class = "info_details_marked_for_review" id = "markedct">0</td>
+                                <td>Marked for Review</td>
+                            </tr>
+                            <tr>
+                                <td class = "info_details_answered_marked_for_review" id = "saved-markedct">
+                                    0
+                                </td>
+                                <td colspan="3">
+                                    Answered & Marked for Review (will be considered for evaluation)
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class = "question-links">
+                    <ul class = "links" id = "linksid">
+                        {%for i in n%}
+                            <li class = "question" id = "question0{{forloop.counter}}"><a id = "question0{{forloop.counter}}link" href="javascript:void(0);" data-btn="question0{{forloop.counter}}" data-href="img_question0{{forloop.counter}}" data-option =  "option0{{forloop.counter}}">{{forloop.counter}}</a></li>
+                        {%endfor%}
+                        <!-- <li class = "question" id = "question01"><a id = "question01link" href="javascript:void(0);" data-btn="question01" data-href="img_question01" data-option =  "option01">01</a></li>
+                        <li class = "question" id = "question02" class = "active"><a href="javascript:void(0);" data-btn="question02" data-href="img_question02" data-option =  "option02">02</a></li>
+                        <li class = "question" id = "question03"><a href="javascript:void(0);" data-btn="question03" data-href="img_question03">03</a></li>
+                        <li>4</li>
+                        <li id = "question05">5</li>
+                        <li class = "question" id = "question06"><a id = "question06link" href="javascript:void(0);" data-btn="question06" data-href="img_question06" data-option =  "option06">06</a></li>
+                        <li>7</li>
+                        <li>8</li>
+                        <li>9</li>
+                        <li>10</li>
+                        <li>11</li>
+                        <li>12</li>
+                        <li>13</li>
+                        <li>14</li>
+                        <li>15</li>
+                        <li>16</li>
+                        <li>17</li>
+                        <li>18</li>
+                        <li>19</li>
+                        <li>20</li>
+                        <li>21</li>
+                        <li>22</li>
+                        <li>23</li>
+                        <li>24</li>
+                        <li>25</li>
+                        <li>26</li>
+                        <li>27</li>
+                        <li>28</li>
+                        <li>29</li>
+                        <li>30</li>
+                        <li>31</li>
+                        <li>32</li>
+                        <li>33</li>
+                        <li>34</li>
+                        <li>35</li>
+                        <li>36</li>
+                        <li>37</li>
+                        <li>38</li>
+                        <li>39</li>
+                        <li>40</li>
+                        <li>41</li>
+                        <li>42</li>
+                        <li>43</li>
+                        <li>44</li>
+                        <li>45</li>
+                        <li>46</li>
+                        <li>47</li>
+                        <li>48</li>
+                        <li>49</li>
+                        <li>50</li>
+                        <li>51</li>
+                        <li>52</li>
+                        <li>53</li>
+                        <li>54</li>
+                        <li>55</li>
+                        <li>56</li>
+                        <li>57</li>
+                        <li>58</li>
+                        <li>59</li>
+                        <li>60</li>
+                        <li>61</li>
+                        <li>62</li>
+                        <li>63</li>
+                        <li>64</li>
+                        <li>65</li>
+                        <li>66</li>
+                        <li>67</li>
+                        <li>68</li>
+                        <li>69</li>
+                        <li>70</li>
+                        <li>71</li>
+                        <li>72</li>
+                        <li>73</li>
+                        <li>74</li>
+                        <li>75</li>
+                        <li>76</li>
+                        <li>77</li>
+                        <li>78</li>
+                        <li>79</li>
+                        <li>80</li>
+                        <li>81</li>
+                        <li>82</li>
+                        <li>83</li>
+                        <li>84</li>
+                        <li>85</li>
+                        <li>86</li>
+                        <li>87</li>
+                        <li>88</li>
+                        <li>89</li>
+                        <li>90</li>
+                        <li>91</li>
+                        <li>92</li>
+                        <li>93</li>
+                        <li>94</li>
+                        <li>95</li>
+                        <li>96</li>
+                        <li>97</li>
+                        <li>98</li>
+                        <li>99</li>
+                        <li>100</li> -->
+                    </ul>
+                </div>
+            </div>     
+        </div>
+    </div>
+    <script src="{% static 'nta-quiz/script.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+    <script> 
+        let answeredct = 0
+
+        var whichquestion= "question01"
+        var whichoption = "option01"
+        var whichquestion_id = document.getElementById(whichquestion)
+        var whichoption_id = document.getElementById(whichoption)
+        let linksul = document.getElementById('linksid')
+        console.log("ints " +whichoption_id)
+        // var option_val = "option1"
+        // // linksul.querySelectorAll('li')
+        // $(linksul).on('click','li',function() {
+        //     $("li").removeClass('active')
+        //     $(this).addClass('active')
+        // })
+        let lists = linksul.querySelectorAll('a')
+        // let lists = document.querySelectorAll('a')
+        // lists.forEach(list => {
+        //     list.addEventListener('click',function(){
+        //         lists.forEach(lst => {
+        //             lst.classList.remove('active');
+        //             console.log("hi")
+        //         })
+        //         this.classList.add('active');
+        //         this.parentElement.classList.add('not_answered')
+        //         $(this).css({
+        //             color:"white"
+        //         })
+        //     })
+        // })
+        
+        // let img_questions = document.querySelectorAll("img")
+        // let img_questionsq = document.getElementById("img_questions");
+        // let img_questions= img_questionsq.querySelectorAll(".img_question");
+        
+        // const container = document.getElementById("img_questions")
+        // console.log(container)
+// const img_questions = container.querySelectorAll("img_ > div.img_question")
+        question01.classList.add('links-background-not-answered')
+        $(question01link).css({
+            color:"white"
+        })
+        const img_questions = document.querySelectorAll(".img_question")
+            // console.log(img_questions)
+        const options = document.querySelectorAll(".options")
+        lists.forEach(list => {
+            list.addEventListener('click',function(){
+                lists.forEach(lst => {
+                    lst.classList.remove('active');
+                    // console.log("hi")
+                })
+                img_questions.forEach(img_question => {
+                    $(img_question).css({
+                        display:"none"
+                    })
+                    console.log("why")
+                })
+                let img_question = this.getAttribute("data-href");
+                // console.log(img_question)
+                // whichquestion = this.getAttribute("data-btn")
+                // whichquestion_id = document.getElementById(whichquestion)
+                // console.log("whichquestion in img is",whichquestion_id)
+                let img_question_id = document.getElementById(img_question)
+                // console.log(img_question_id)
+                $(img_question_id).css({
+                    display:"block"
+                })
+                this.classList.add('active');
+                // this.parentElement.classList.add('not_answered')
+                let isAnsweredPresent = this.parentElement.classList.contains("links-background-answered")
+                let isMarkedPresent = this.parentElement.classList.contains("links-background-marked-for-review")
+                let isSavedMarkedPresent = this.parentElement.classList.contains("links-background-answered-marked-for-review")
+                // console.log("present or not",isMainPresent)
+                // "links-background-answered-marked-for-review","links-background-marked-for-review",
+                // && isMarkedPresent && isSavedMarkedPresent
+                if(!(isAnsweredPresent || isMarkedPresent || isSavedMarkedPresent)) {
+                    this.parentElement.classList.add('links-background-not-answered')
+                }
+                // $(whichquestion_id).removeClass("links-background-answered-marked-for-review")
+                // $(whichquestion_id).removeClass("links-background-marked-for-review")
+                // $(whichquestion_id).removeClass("links-background-answered")
+                const not_answeredct = document.querySelectorAll('.links-background-not-answered').length;
+                // console.log("Not answered",not_answeredct)
+
+                changeBackground()
+                $(this).css({
+                    color:"white"
+                })
+
+                options.forEach(opt => {
+                    opt.classList.add('not-visible')
+                    console.log("why")
+                })
+                let option = this.getAttribute("data-option");
+                // option_val = option
+                whichoption = this.getAttribute("data-option");
+                // console.log(img_question)
+                whichquestion = this.getAttribute("data-btn")
+                whichquestion_id = document.getElementById(whichquestion)
+                // console.log("whichquestion in img is",whichquestion_id)
+                let option_id = document.getElementById(option)
+                option_id.classList.remove('not-visible')
+
+                whichoption_id = option_id
+                console.log("option_id is " + whichoption_id)
+            })
+        })
+        // let lists = document.querySelectorAll('a')
+        // lists.forEach(list => {
+        //     list.addEventListener('click',function(){
+        //         lists.forEach(lst => {
+        //             lst.classList.remove('active');
+        //             console.log("hi")
+        //         })
+        //         this.classList.add('active');
+        //     })
+        // })
+
+
+        // options processing
+        function changeBackground() {
+            const answeredct = document.querySelectorAll('.links-background-answered').length;
+            console.log("Answered ct is " + answeredct)
+            const mark_reviewct = document.querySelectorAll('.links-background-marked-for-review').length;
+            console.log("Marked ct is " + mark_reviewct)
+            const save_mark_reviewct = document.querySelectorAll('.links-background-answered-marked-for-review').length;
+            console.log("Saved marked ct " + save_mark_reviewct)
+            const not_answeredct = document.querySelectorAll('.links-background-not-answered').length;
+            console.log("Not answered",not_answeredct)
+            const not_visitedct = {{total_questions}} -(answeredct+mark_reviewct + save_mark_reviewct + not_answeredct)
+            // const not_vistedctid = (document.getElementById("not-visitedct")).innerText
+            // console.log(not_visitedctid)
+            // answeredct_id = document.getElementById("document.querySelectorAll('.links-background-not-answeredansweredct")
+            // answeredct_id.text = answeredct
+            var attempted = answeredct + save_mark_reviewct
+            document.getElementById("answeredct").innerText = answeredct;
+            document.getElementById("not-answeredct").innerText = not_answeredct;
+            document.getElementById("markedct").innerText = mark_reviewct;
+            document.getElementById("saved-markedct").innerText = save_mark_reviewct;
+            document.getElementById("not-visitedct").innerText = not_visitedct;
+
+        }
+        $(document).ready(function() {
+            // $(".submitBtn").on('click',function() {
+            //     var _checkedAns = $("input[name='question1']:checked").val(); 
+            //     console.log(_checkedAns)
+            //     return false;
+            // })
+            url = window.location.href
+            const quizForm = document.getElementById('quiz-form')
+            const csrf = document.getElementsByName('csrfmiddlewaretoken')
+            const sendData = () => {
+            const elements = [...document.getElementsByClassName('ans')]
+            const data = {}
+            data['csrfmiddlewaretoken'] = csrf[0].value
+            elements.forEach(el=>{
+                if (el.checked && el.classList.contains('answer')) {
+                    data[el.name] = el.value
+                } else {
+                    if (!data[el.name]) {
+                        data[el.name] = null
+                    }
+                }
+            })
+            
+            $.ajax({
+                type:'POST',
+                url:`${url}/save/`,
+                // data: { data: data },
+                data:data,
+                success:function(response) {
+                    console.log("Huge success")
+                    // 'correctAnsLst': correct_anslst, 'selectedAnsLst': selected_anslst, 'statusLst': status_lst, 'score': score
+                    console.log(response.correctAnsLst)
+                    console.log(window.location.href)
+                    // window.location.href= "http://127.0.0.1:8000/result/1"
+                    window.location.href= `http://127.0.0.1:8000/result/${response.pk}`
+                    
+                },
+                error: function(error){
+                    console.log("it's an error")
+                    console.log(error)
+                }
+            })
+            console.log(data)
+            }
+            quizForm.addEventListener('submit', e=>{
+            e.preventDefault()
+            console.log("Quiz form clicked")
+            if (confirm("Are you sure you want to submit")) {
+                sendData()
+            } 
+            // sendData()
+            })
+        })
+
+        // button's code
+        $(document).ready(function(){
+            // $(document).on('click','#btn_save', function() {
+            //     // console.log("It is clicked")
+            //     $(question1).addClass("answered")
+            // })
+            // $(document).on('click','#btn_save_mark_review', function() {
+            //     // console.log("It is clicked")
+            //     $(question1).addClass("save_mark_review")
+            // })
+            // $(document).on('click','#btn_mark_review', function() {
+            //     // console.log("It is clicked")
+            //     $(question1).addClass("mark_review")
+            // })
+
+            // var whichquestion = "question01"
+            // console.log("which question is ",whichquestion_id)
+            // $(document).on('click','#btn_save', function() {
+            //     // console.log("It is clicked")
+            //     let question_btn = this.getAttribute("data-btn");
+            //     console.log(question_btn)
+            //     let question_btn_id = document.getElementById(question_btn)
+            //     $(question_btn_id).css({
+            //         background: "url(answered.png)",
+            //         color: "#fff"
+            //     })
+            // })
+            console.log("checkign  " + whichoption_id)
+            
+            $(document).on('click','#btn_save', function(event) {
+                event.preventDefault()
+                // console.log("It is clicked")
+                // $(whichquestion_id).css({
+                //     background: "url({%static 'nta-quiz/answered.png'%})",
+                //     color: "#fff"
+                // })
+                // $(body).css({
+                //     color:"blue",
+                //     background:"green"
+                // }) 
+                // console.log("her jf",whichoption)
+                // $(`input[name='${whichoption}']:checked`).val();
+                 
+                // const happens = document.querySelectorAll(`#whichoption_id tr td input[name='${whichoption}']`)
+                // const happens = document.querySelectorAll(`input[name='${whichoption}']`)
+                // console.log('Happends',happens)
+                // console.log(" id " ,whichoption_id )
+                var _checkedAns = $(`input[name='${whichoption}']:checked`).val();
+                if(_checkedAns == undefined) {
+                    alert("Select an option")
+                } else {
+                    whichquestion_id = document.getElementById(whichquestion)
+                    // console.log("which question is yours" + whichquestion_id)
+                    // console.log("body of " + body)
+                    // whichquestion_id.classList.add("links-background-answered");
+                    $(whichquestion_id).removeClass("links-background-answered-marked-for-review")
+                    $(whichquestion_id).removeClass("links-background-marked-for-review")
+                    $(whichquestion_id).removeClass("links-background-not-answered")
+                    $(whichquestion_id).addClass("links-background-answered");
+                    $(`input[name='${whichoption}']:checked`).addClass('answer');
+                }
+                // const answeredct = document.querySelectorAll('.links-background-answered').length;
+                // console.log("Answered ct is " + answeredct)
+                // const mark_reviewct = document.querySelectorAll('.links-background-marked-for-review').length;
+                // console.log("Marked ct is " + mark_reviewct)
+                // const save_mark_reviewct = document.querySelectorAll('.links-background-answered-marked-for-review').length;
+                // console.log("Saved marked ct " + save_mark_reviewct)
+                // const not_answeredct = document.querySelectorAll('.links-background-not-answered').length;
+                // console.log("Not answered",not_answeredct)
+                // const not_visitedct = 100 -(answeredct+mark_reviewct + save_mark_reviewct + not_answeredct)
+                // console.log(not_visitedct)
+                changeBackground()
+                // answeredct++
+                // answeredct = $('.question').filter(function(){
+                // return $(this).css('background') == "url({%static 'nta-quiz/answered.png'%})";
+                // return $(this).css('background') == ("../media/answered.png");
+                // }).length
+                // var ctBkImg = 0;
+                // $(".question").each(function(){
+                //     if ($(this).css("color") == "white") ctBkImg++
+                // }); 
+                // console.log("Answered count " +answeredct)
+                // console.log("Answered count " +ctBkImg)
+            })
+            $(document).on('click','#btn_save_mark_review', function(event) {
+                event.preventDefault()
+                // console.log("It is clicked")
+                var _checkedAns = $(`input[name='${whichoption}']:checked`).val();
+                if(_checkedAns == undefined) {
+                    alert("Select an option")
+                } else {
+                $(whichquestion_id).removeClass("links-background-answered")
+                $(whichquestion_id).removeClass("links-background-marked-for-review")
+                $(whichquestion_id).removeClass("links-background-not-answered")
+                
+                
+                $(whichquestion_id).addClass("links-background-answered-marked-for-review");
+                changeBackground()
+                $(`input[name='${whichoption}']:checked`).addClass('answer');
+                }
+                // const answeredct = document.querySelectorAll('.links-background-answered').length;
+                // console.log("Answered ct is " + answeredct)
+                // const mark_reviewct = document.querySelectorAll('.links-background-marked-for-review').length;
+                // console.log("Marked ct is " + mark_reviewct)
+                // const save_mark_reviewct = document.querySelectorAll('.links-background-answered-marked-for-review').length;
+                // console.log("Saved marked ct " + save_mark_reviewct)
+                // const not_answeredct = document.querySelectorAll('.links-background-not-answered').length;
+                // console.log("Not answered",not_answeredct)
+
+            })
+            $(document).on('click','#btn_mark_review', function(event) {
+                event.preventDefault()
+                console.log("Option id not needed",whichoption)
+                // var _checkedAns = $("input[name='option1']:checked").val(); 
+                $(`input[name='${whichoption}']:checked`).removeClass('answer');
+                // var _checkedAns = $(`input[name='${whichoption}']:checked`).val(); 
+                // console.log("Is checked",_checkedAns)
+                // console.log("It is clicked")
+                // $(whichquestion_id).css({
+                //     background: "url({%static 'nta-quiz/marked_for_review.png'%})",
+                //     color: "#fff"
+                // })
+                
+                $(whichquestion_id).removeClass("links-background-answered")
+                $(whichquestion_id).removeClass("links-background-answered-marked-for-review")
+                $(whichquestion_id).addClass("links-background-marked-for-review");
+                $(whichquestion_id).removeClass("links-background-not-answered")
+
+                changeBackground()
+                // const answeredct = document.querySelectorAll('.links-background-answered').length;
+                // console.log("Answered ct is " + answeredct)
+                // const mark_reviewct = document.querySelectorAll('.links-background-marked-for-review').length;
+                // console.log("Marked ct is " + mark_reviewct)
+                // const save_mark_reviewct = document.querySelectorAll('.links-background-answered-marked-for-review').length;
+                // console.log("Saved marked ct " + save_mark_reviewct)
+            })
+            $(document).on('click','#btn-clear',function(event) {
+                event.preventDefault()
+                console.log("clicked in btnclear")
+                // const  radioBtns = document.querySelectorAll(`input[type='radio'][name='option2']`)
+                const radioBtns = whichoption_id.querySelectorAll(
+                    `input[type='radio']`
+                )
+                radioBtns.forEach(radioBtn => {
+                if(radioBtn.checked===true) radioBtn.checked= false;
+                })
+            })
+            
+            
+            // console.log("Url is " ,urliv)
+            // $(document).on('click','#question2',function() {
+            //     // console.log("Clicked")
+            //     $(img_question2).css({
+            //         display:"block"
+            //     })
+            // })
+            // var visibleImg = 0;
+            // function showImg()
+            // {
+            //     $(".img_question").hide();
+            //     $(".img_question:eq("+ visibleImg +")").show();
+            // }
+            // // showImg()
+
+            // function showNextImg()
+            // {
+            // // if(visibleDiv== $(".img_question").length-1)
+            // if(visibleImg == 3)
+            // {
+            //     visibleImg = 0;
+            // }
+            // else {
+            //     visibleImg ++;
+            // }
+            // showImg();
+            // }
+
+
+            // function showPrevImg()
+            // {
+            // if (visibleImg == 0)
+            // {
+            //     // visibleImg= $(".img_question").length-1
+            //     visibleImg = 3
+            // }
+            // else {
+            //     visibleImg --;
+            // }
+            // showImg();
+            // }
+            // $(document).on('click','#nextbtn',function(event) {
+            //     event.preventDefault()
+            //     console.log('btn next clicked')
+            //     showNextImg()
+            // })
+            
+        })
+    </script>
+</body>
+</html>

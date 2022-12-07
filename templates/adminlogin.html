@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%static 'style.css'%}">
+    <title>Document</title>
+</head>
+<body>
+    <div class="banner">
+        <div class="navbar">
+            <div class = "full_logo">
+                <img src="{% static 'logo.png' %}" class = "logo" alt="Logo">
+                <div class="logoheading">
+                    <h2 >EXAMINATION</h2>
+                    <h2 >WARRIOR</h2>
+                </div>
+            </div>
+            <ul>
+                <!-- <li><a href="">Student</a></li>
+                <li><a href="">Admin</a></li> -->
+            </ul>
+        </div>
+    <div class="loginpg">
+    <div class="box">
+        <form action="{% url 'performlogin' %}" method="POST">
+            {% csrf_token %} 
+            <div class="form">
+                <h2>Sign in</h2>
+                <div class="inputBox">
+                    <input type="text" required="required" name = "username">
+                    <span>Username</span>
+                    <i></i>
+                </div>
+                <div class="inputBox">
+                    <input type="password" required="required" name = "password">
+                    <span>password</span>
+                    <i></i>
+                </div>
+                <br>
+                <input type="submit" value="Login">
+            </div>
+        </form>
+    </div>
+</div></div>
+    
+
+</body>
+</html>

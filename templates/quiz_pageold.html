@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="quiz-form">
+        <form action="" method = "post">
+            {%csrf_token%}
+            <div>
+                <img src="/media/{{quiz.name}}/question1.jpg" alt="Question1">
+            </div>
+            <input class = "ans" name = "question1" value = "option1" type="radio">1)
+            <input class = "ans" name = "question1" value = "option2" type="radio">2)
+            <input class = "ans" name = "question1" value = "option3" type="radio">3)
+            <input class = "ans" name = "question1" value = "option4" type="radio">4)
+        
+        <hr>
+        <img src="/media/" alt="Question2">
+        <input class = "ans" name = "question2" value = "option1" type="radio">1)
+        <input class = "ans" name = "question2" value = "option2" type="radio">2)
+        <input class = "ans" name = "question2" value = "option3" type="radio">3)
+        <input class = "ans" name = "question2" value = "option4" type="radio">4)
+        <hr>
+        <hr>
+        <input type="submit" value = "Submit" class = "submitBtn" >
+        <input type="reset">
+        </form>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>   
+    <script>
+        $(document).ready(function() {
+            // $(".submitBtn").on('click',function() {
+            //     var _checkedAns = $("input[name='question1']:checked").val(); 
+            //     console.log(_checkedAns)
+            //     return false;
+            // })
+        
+            const quizForm = document.getElementById('quiz-form')
+            const csrf = document.getElementsByName('csrfmiddlewaretoken')
+            const sendData = () => {
+            const elements = [...document.getElementsByClassName('ans')]
+            const data = {}
+            data['csrfmiddlewaretoken'] = csrf[0].value
+            elements.forEach(el=>{
+                if (el.checked) {
+                    data[el.name] = el.value
+                } else {
+                    if (!data[el.name]) {
+                        data[el.name] = null
+                    }
+                }
+            })
+            console.log(data)
+            }
+            quizForm.addEventListener('submit', e=>{
+            e.preventDefault()
+            console.log("Quiz form clicked")
+            sendData()
+            })
+        })
+    </script>
+</body>
+</html>
